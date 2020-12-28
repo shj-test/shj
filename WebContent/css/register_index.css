@@ -1,0 +1,83 @@
+.cp-register-agreement{
+    position: relative;
+}
+
+.cp-register-agreement .cp-content {
+    padding: 15px 30px;
+    overflow-y: scroll;
+    color: #555;
+}
+
+.cp-register-agreement .cp-agree {
+    height: 59px;
+    padding: 15px;
+    text-align: center;
+    border-top: 1px solid #eee;
+    background-color: #F8F8F8;
+}
+
+.cp-register-agreement .layui-form-checkbox[lay-skin=primary] span{
+    padding-right: 0;
+}
+
+.cp-register-agreement .cp-content h1 {
+    font-size: 22px;
+    padding: 15px 0;
+    font-weight: bold;
+}
+
+.cp-register-agreement .cp-content h2 {
+    font-size: 16px;
+    line-height: 28px;
+    text-indent: 2em;
+    padding: 2px 0;
+    font-weight: bold;
+}
+
+.cp-register-agreement .cp-content h3 {
+    line-height: 28px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.cp-register-agreement .cp-content p{
+    padding: 10px 0;
+    line-height: 24px;
+    text-indent: 2em;
+}
+
+.cp-register-form{
+    width: 800px;
+    margin: 30px auto;
+    background-color: #FFFFFF;
+    padding: 30px 0;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
+.cp-register-tab{
+    height: 38px;
+    text-align: center;
+    border-image: linear-gradient(to right, #fff , #CCCCCC, #fff) 1 1;
+    border-bottom: 1px solid #CCCCCC;
+}
+
+.cp-register-tab > a{
+    display: inline-block;
+    height: 38px;
+    line-height: 38px;
+    padding: 0 30px;
+    font-size: 16px;
+}
+
+.cp-register-tab > a.active{
+    height: 37px;
+    border-bottom: 2px solid #4ca686;
+}
+
+.cp-register-form .layui-form{
+    padding: 50px 0;
+    width: 470px;
+    margin: auto;
+}

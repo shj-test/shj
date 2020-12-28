@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.itheima.dao.UserDao" >
+
+    <!--通过账号和密码查询用户 -->
+    <select id="findUser" parameterType="String" resultType="user">
+	    select *
+	    from user
+	    where username = #{name} and password=#{pwd}
+    </select>
+
+    <!--通过账号查询用户 -->
+    <select id="findname" parameterType="String" resultType="user">
+	    select *
+	    from user
+	    where username = #{name}
+    </select>
+
+    <!--查询所有用户-->
+    <select id="findall" resultType="user">
+	    select * from user
+    </select>
+
+    <!--通过用户id查询用户-->
+    <select id="findwithid" parameterType="Integer" resultType="user">
+        select * from user where user_id=#{id}
+    </select>
+
+    <!--&lt;!&ndash;通过用户名查询用户(模糊查询)&ndash;&gt;-->
+    <select id="findwithname" parameterType="String" resultType="user">
+        select * from user where username like concat('%',#{name},'%')
+    </select>
+    
+    <!-- 用户注册：添加用户-->
+    <insert id="register" parameterType="user">
+	    insert into user(username,password) values(#{username},#{password})
+    </insert>
+
+    <!-- 后台：添加用户-->
+    <insert id="useradd" parameterType="user">
+	    insert into user(username,password,nickname,pseudonym) values(#{username},#{password},#{nickname},#{pseudonym})
+    </insert>
+
+	<!--通过用户id删除用户-->
+    <delete id="userdel" parameterType="Integer">
+        delete from user where user_id=#{id}
+    </delete>
+
+
+
+    <!--&lt;!&ndash;&lt;!&ndash; 判断书籍是否在用户的书架中 &ndash;&gt;&ndash;&gt;-->
+    <select id="find" parameterType="Integer" resultMap="UserWithBookResult2">
+        select u.*,b.book_id,b.bookname,b.image,b.blurb
+        from user u,book b,collect_book cb
+        where u.user_id=cb.user_id and b.book_id=cb.book_id and u.user_id=#{uid} and b.book_id=#{bid}
+    </select>
+
+   <!--&lt;!&ndash; &lt;!&ndash; 自定义手动映射类型 &ndash;&gt;&ndash;&gt;-->
+    <resultMap type="User" id="UserWithBookResult2">
+        <id property="user_id" column="id" />
+        <result property="username" column="name" />
+        <result property="password" column="pwd" />
+        <result property="nickname" column="nickname" />
+        <result property="pseudonym" column="pseudonym" />
+       <!-- &lt;!&ndash;&lt;!&ndash; 多对多关联映射：collection &ndash;&gt;&ndash;&gt;-->
+        <collection property="book" ofType="Book">
+            <id property="book_id" column="book_id" />
+            <result property="bookname" column="bookname" />
+            <result property="image" column="image" />
+            <result property="blurb" column="blurb" />
+        </collection>
+    </resultMap>
+
+    <!--修改用户信息 -->
+    <update id="userupd" parameterType="user">
+        update user set username=#{username},password=#{password},nickname=#{nickname},pseudonym=#{pseudonym} where user_id=#{user_id}
+    </update>
+
+    <!--&lt;!&ndash; 删除书架上的书籍 &ndash;&gt;-->
+    <delete id="delbc" parameterType="Integer">
+        delete from collect_book where user_id=#{uid} and book_id=#{bid}
+    </delete>
+
+    <!-- &lt;!&ndash; 将书籍加入书架 &ndash;&gt;-->
+    <insert id="addbc" parameterType="Integer">
+        insert into collect_book(user_id,book_id) values(#{uid},#{bid})
+    </insert>
+
+    <!--查询用户的账户明细-->
+    <select id="findUA"  parameterType="Integer" resultMap="UserAccount">
+        select u.*,a.account_id,a.type,a.money,a.time,a.beizhu from account a,user u where a.user_id=u.user_id
+        <if test="id!=-1">
+            and  u.user_id=#{id}
+        </if>
+    </select>
+    <resultMap id="UserAccount" type="User">
+        <id property="user_id" column="user_id"></id>
+        <result property="username" column="username"></result>
+        <result property="password" column="password"></result>
+        <result property="nickname" column="nickname"></result>
+        <result property="pseudonym" column="pseudonym"></result>
+        <result property="status" column="status"></result>
+        <collection property="account" ofType="Account">
+            <id property="account_id" column="account_id"></id>
+            <result property="type" column="type"></result>
+            <result property="money" column="money"></result>
+            <result property="time" column="time"></result>
+            <result property="beizhu" column="beizhu"></result>
+        </collection>
+    </resultMap>
+
+    <!--查询用户的评论-->
+    <select id="findUC"  parameterType="Integer" resultMap="UserComment">
+        select u.username,b.bookname,c.* from book b,comment c,user u where c.user_id=u.user_id and b.book_id=c.book_id
+        <if test="id!=-1">
+            and  u.user_id=#{id}
+        </if>
+    </select>
+    <resultMap id="UserComment" type="User">
+        <id property="user_id" column="user_id"></id>
+        <result property="username" column="username"></result>
+        <result property="password" column="password"></result>
+        <result property="nickname" column="nickname"></result>
+        <result property="pseudonym" column="pseudonym"></result>
+        <result property="status" column="status"></result>
+        <collection property="comment" ofType="Comment">
+            <id property="comment_id" column="comment_id"></id>
+            <result property="content" column="content"></result>
+            <result property="time" column="time"></result>
+            <collection property="book" ofType="Book">
+                <id property="book_id" column="book_id"></id>
+                <result property="bookname" column="bookname"></result>
+                <result property="image" column="image"></result>
+                <result property="blurb" column="blurb"></result>
+            </collection>
+        </collection>
+    </resultMap>
+
+    <!--查询用户收藏列表（书籍）-->
+    <select id="findUB"  parameterType="Integer" resultMap="UserBook">
+        select u.*,b.book_id,b.bookname,b.image,b.blurb
+        from book b,collect_book cb,user u
+        where cb.user_id=u.user_id and b.book_id=cb.book_id
+        <if test="id!=-1">
+            and  u.user_id=#{id}
+        </if>
+    </select>
+    <resultMap id="UserBook" type="User">
+        <id property="user_id" column="user_id"></id>
+        <result property="username" column="username"></result>
+        <result property="password" column="password"></result>
+        <result property="nickname" column="nickname"></result>
+        <result property="pseudonym" column="pseudonym"></result>
+        <result property="status" column="status"></result>
+        <collection property="book" ofType="Book">
+            <id property="book_id" column="book_id"></id>
+            <result property="bookname" column="bookname"></result>
+            <result property="image" column="image"></result>
+            <result property="blurb" column="blurb"></result>
+        </collection>
+    </resultMap>
+
+    <!--查询用户收藏列表（作者）-->
+    <select id="findUU"  parameterType="Integer" resultMap="UserUser">
+        select u.user_id uid,u.username uname,b.uid user_id,b.uname username
+        from user u right outer join (select u.user_id uid,u.username uname,ca.user_id cid from user u,collect_author ca where ca.author_id=u.user_id) b on (u.user_id=b.cid)
+        <if test="id!=-1">
+            and  u.user_id=#{id}
+        </if>
+    </select>
+    <resultMap id="UserUser" type="User">
+        <id property="user_id" column="uid"></id>
+        <result property="username" column="uname"></result>
+        <result property="passward" column="upwd"></result>
+        <result property="nickname" column="unn"></result>
+        <result property="pseudonym" column="upd"></result>
+        <result property="status" column="ust"></result>
+        <collection property="user" ofType="User">
+            <id property="user_id" column="user_id"></id>
+            <result property="username" column="username"></result>
+            <result property="password" column="password"></result>
+            <result property="nickname" column="nickname"></result>
+            <result property="pseudonym" column="pseudonym"></result>
+            <result property="status" column="status"></result>
+        </collection>
+    </resultMap>
+
+    <!--<id property="user_id" column="uid"></id>
+    <result property="username" column="uname"></result>
+    <result property="passward" column="upwd"></result>
+    <result property="nickname" column="unn"></result>
+    <result property="pseudonym" column="upd"></result>
+    <result property="status" column="ust"></result>-->
+
+
+    <!--查询用户的账户明细-->
+    <!--<select id="find"  parameterType="Integer" resultMap="UserBookAccountComment">
+        select * from account a,user u where a.user_id=u.user_id
+        <if test="id!=-1">
+            and  u.user_id=#{id}
+        </if>
+    </select>
+    <resultMap id="UserBookAccountComment" type="User">
+        <id property="user_id" column="uid"></id>
+        <result property="username" column="uname"></result>
+        <result property="password" column="upwd"></result>
+        <result property="nickname" column="ucn"></result>
+        <result property="pseudonym" column="upd"></result>
+        <result property="status" column="ust"></result>
+        <collection property="user" ofType="User">
+            <id property="user_id" column="user_id"></id>
+            <result property="username" column="username"></result>
+            <result property="password" column="password"></result>
+            <result property="nickname" column="nickname"></result>
+            <result property="pseudonym" column="pseudonym"></result>
+            <result property="status" column="status"></result>
+        </collection>
+        <collection property="book" ofType="Book">
+            <id property="book_id" column="book_id"></id>
+            <result property="bookname" column="bookname"></result>
+            <result property="image" column="image"></result>
+            <result property="blurb" column="blurb"></result>
+        </collection>
+        <collection property="account" ofType="Account">
+            <id property="account_id" column="account_id"></id>
+            <result property="type" column="type"></result>
+            <result property="money" column="money"></result>
+            <result property="time" column="time"></result>
+        </collection>
+        <collection property="comment" ofType="Comment">
+            <id property="comment_id" column="comment_id"></id>
+            <result property="content" column="content"></result>
+            <result property="time" column="time"></result>
+        </collection>
+    </resultMap>-->
+	
+</mapper>

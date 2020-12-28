@@ -1,0 +1,9 @@
+eclipse.preferences.version=1
+encoding//src/com/itheima/controller/BookController.java=UTF-8
+encoding//src/com/itheima/controller/UserController.java=UTF-8
+encoding//src/com/itheima/dao/BookDao.java=UTF-8
+encoding//src/com/itheima/dao/UserDao.java=UTF-8
+encoding//src/com/itheima/service/BookService.java=UTF-8
+encoding//src/com/itheima/service/UserService.java=UTF-8
+encoding//src/com/itheima/service/impl/BookServiceImpl.java=UTF-8
+encoding//src/com/itheima/service/impl/UserServiceImpl.java=UTF-8

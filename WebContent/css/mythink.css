@@ -1,0 +1,62 @@
+/**  全局  **/
+*{padding: 0; margin: 0;}
+
+/**  间距  **/
+.pd5{ padding: 5px;}
+.pd10{ padding: 10px;}
+.pd15{ padding: 15px;}
+.pd20{ padding: 20px;}
+
+/**  位置  **/
+.flex{
+	display: flex;
+}
+.flex_align_center{ align-items: center;}
+.flex_cell{
+	flex: 1 1 0;
+}
+
+.flex_col{
+	display: flex;
+	flex-direction: column;
+}
+.flex_item{
+	flex: 1 1 0;
+}
+
+
+.absolute{ position: absolute;}
+.relative{ position: relative;}
+
+.left{float: left;}
+.right{float: right;}
+.clear{clear: both;}
+
+
+/**  文本  **/
+.font12{ font-size: 12px;}
+.font14{ font-size: 14px;}
+.font16{ font-size: 16px;}
+.font18{ font-size: 18px;}
+.font-b{font-weight: bold;}
+
+.text_center{ text-align: center;}
+.text_left{ text-align: left;}
+.text_right{ text-align: right;}
+.text_indent{ text-indent: 2em;}
+.color_gray{ color: #8e8e8e;}
+
+
+
+/**  状态  **/
+#vue{ padding: 15px;}
+.hiden-vue{ height: 0px; overflow: hidden;}
+.pointer{ cursor: pointer;}
+
+
+/**  插件样式  **/
+.layui-tree li a{ padding-left: 22px;}
+.layui-tree li .layui-tree-spread + a{ padding-left: 0px;}
+.layui-tree li ul{ margin-left: 40px;}
+.ivu-tree-arrow-hidden i{ display: inline-block !important; opacity: 0;}
+.layui-table-view .layui-form-switch{ top: 3px;}
