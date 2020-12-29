@@ -17,7 +17,7 @@
 
     <!-- 配置扫描器 -->
     <context:component-scan 
-               base-package="com.itheima.controller" />
+               base-package="com.shj.controller" />
 
     <!-- 注解驱动：配置处理器映射器和适配器 -->
     <mvc:annotation-driven>
@@ -55,7 +55,7 @@
 	<!--<mvc:interceptors>
     	<mvc:interceptor>
         	<mvc:mapping path="/**" />
-        	<bean class="com.itheima.core.interceptor.LoginInterceptor" />
+        	<bean class="com.shj.core.interceptor.LoginInterceptor" />
     	</mvc:interceptor>
 	</mvc:interceptors>-->
 </beans>

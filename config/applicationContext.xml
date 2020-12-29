@@ -46,10 +46,10 @@
 		<property name="configLocation" 
                      value="classpath:mybatis-config.xml" />
 	</bean>
-	<!-- 接口开发,扫描 com.itheima.dao包 ，写在此包下的接口即可被扫描到 -->
+	<!-- 接口开发,扫描 com.shj.dao包 ，写在此包下的接口即可被扫描到 -->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="com.itheima.dao" />
+		<property name="basePackage" value="com.shj.dao" />
 	</bean>
 	<!-- 配置扫描@Service注解 -->
-	<context:component-scan base-package="com.itheima.service"/>	
+	<context:component-scan base-package="com.shj.service"/>
 </beans>

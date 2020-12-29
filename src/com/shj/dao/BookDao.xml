@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shj.dao.BookDao" >
+
+    <!--查询所有书籍-->
+    <select id="findBook" resultMap="BookType">
+	    select b.*,t.typename from book b,type t where b.type_id=t.type_id
+        <if test="id!=-1">
+            and  b.book_id=#{id}
+        </if>
+    </select>
+    <resultMap id="BookType" type="Book">
+        <id property="book_id" column="book_id"></id>
+        <result property="bookname" column="bookname"></result>
+        <result property="image" column="image"></result>
+        <result property="blurb" column="blurb"></result>
+        <collection property="type" ofType="Type">
+            <id property="type_id" column="type_id"></id>
+            <result property="typename" column="typename"></result>
+        </collection>
+    </resultMap>
+
+    <!-- 查询收藏某书籍的用户-->
+    <select id="findBU" parameterType="Integer" resultMap="BookUser">
+        select b.book_id,b.bookname,b.image,b.blurb,u.user_id,u.username
+        from collect_book cb,book b,user u
+        where b.book_id=cb.book_id and u.user_id=cb.user_id
+        <if test="id!=-1">
+            and  b.book_id=#{id}
+        </if>
+    </select>
+    <resultMap id="BookUser" type="Book">
+        <id property="book_id" column="book_id"></id>
+        <result property="bookname" column="bookname"></result>
+        <result property="image" column="image"></result>
+        <result property="blurb" column="blurb"></result>
+        <collection property="user" ofType="User">
+            <id property="user_id" column="user_id"></id>
+            <result property="username" column="username"></result>
+            <result property="password" column="password"></result>
+            <result property="nickname" column="nickname"></result>
+            <result property="pseudonym" column="pseudonym"></result>
+            <result property="status" column="status"></result>
+        </collection>
+    </resultMap>
+
+   <!-- &lt;!&ndash; 按书籍名称模糊查找 &ndash;&gt;-->
+     <select id="findwithname" parameterType="String" resultType="book">
+	    select * from book where bookname like concat('%',#{name},'%')
+    </select>
+
+    <!--&lt;!&ndash; 按书籍类型查找 &ndash;&gt;-->
+    <select id="findwithtype" parameterType="String" resultType="book">
+	    select * from book,type where book.type_id=type.type_id and type.typename=#{type}
+    </select>
+
+    <!--&lt;!&ndash; 修改书籍信息 &ndash;&gt;-->
+    <update id="updbook" parameterType="java.util.Map">
+	  update book set bookname=#{name},type_id=#{tid},image=#{image},blurb=#{blurb} where book_id=#{bid}
+	</update>
+
+    <!--&lt;!&ndash; 按书籍id删除书籍 &ndash;&gt;-->
+    <delete id="delbook" parameterType="Integer">
+        delete from book where book_id=#{id}
+    </delete>
+
+    	<!-- 添加书籍 -->
+    <insert id="addbook" parameterType="java.util.Map">
+        insert into book(bookname,user_id,type_id,image,blurb)
+        values(#{name},#{uid},#{tid},#{image},#{blurb})
+    </insert>
+
+    <!--查找书籍的章节-->
+    <select id="findBCh" parameterType="Integer" resultMap="BookChapter">
+        select b.*,ch.chapter_id,ch.chaptername,ch.content from book b,chapter ch where b.book_id=ch.book_id
+        <if test="id!=-1">
+            and  b.book_id=#{id}
+        </if>
+    </select>
+    <resultMap id="BookChapter" type="Book">
+        <id property="book_id" column="book_id"></id>
+        <result property="bookname" column="bookname"></result>
+        <result property="image" column="image"></result>
+        <result property="blurb" column="blurb"></result>
+        <collection property="chapter" ofType="Chapter">
+            <id property="chapter_id" column="chapter_id"></id>
+            <result property="chaptername" column="chaptername"></result>
+            <result property="content" column="content"></result>
+        </collection>
+    </resultMap>
+
+    <!--查找书籍的评论-->
+    <select id="findBC" parameterType="Integer" resultMap="BookComment">
+        select u.username,b.bookname,c.* from user u,book b,comment c where b.book_id=c.book_id and u.user_id=c.user_id
+        <if test="id!=-1">
+            and  b.book_id=#{id}
+        </if>
+    </select>
+    <resultMap id="BookComment" type="Book">
+        <id property="book_id" column="book_id"></id>
+        <result property="bookname" column="bookname"></result>
+        <result property="image" column="image"></result>
+        <result property="blurb" column="blurb"></result>
+        <collection property="comment" ofType="Comment">
+            <id property="comment_id" column="comment_id"></id>
+            <result property="content" column="content"></result>
+            <result property="time" column="time"></result>
+            <collection property="user" ofType="User">
+                <id property="user_id" column="user_id"></id>
+                <result property="username" column="username"></result>
+                <result property="password" column="password"></result>
+                <result property="nickname" column="nickname"></result>
+                <result property="pseudonym" column="pseudonym"></result>
+                <result property="status" column="status"></result>
+            </collection>
+        </collection>
+    </resultMap>
+
+</mapper>
